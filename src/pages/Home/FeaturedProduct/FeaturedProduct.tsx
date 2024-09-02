@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import productImg from "../../../assets/cartImg/item-img-1-1.jpg";
 import { Button } from "@/components/ui/button";
-import Pagination_ from "@/pages/Pagination/Pagination";
+// import Pagination_ from "@/pages/Pagination/Pagination";
 import AOS from "aos";
 import "aos/dist/aos.css";
 const products = [
@@ -121,9 +121,9 @@ const FeaturedProduct = () => {
           </Card>
         ))}
       </div>
-      <div className="mt-7">
-        <Pagination_ />
-      </div>
+      {/* <div className="mt-7">
+        <Pagination_ paginationData={0} />
+      </div> */}
     </div>
   );
 };

@@ -66,11 +66,11 @@
   margin: 0 5px;
   float: left;
 }
-.card .details .center .available{
-    color: #16a34a;
+.card .details .center .available {
+  color: #16a34a;
 }
-.card .details .center .unavailable{
-    color: #dc2626;
+.card .details .center .unavailable {
+  color: #dc2626;
 }
 .card .details .center ul li a {
   display: block;

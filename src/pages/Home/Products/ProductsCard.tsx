@@ -1,144 +1,51 @@
 // import { Card } from "@/components/ui/card";
+import {
+  useGetHomeProductQuery,
+  useGetProductQuery,
+} from "@/redux/features/products/Products";
 import "./ProductsCardStyle/ProductsCard.css";
-import productImg from "../../../assets/cartImg/item-img-1-1.jpg";
+// import productImg from "../../../assets/cartImg/item-img-1-1.jpg";
 import { Button } from "@/components/ui/button";
-const ProductsCard = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 2,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 3,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 4,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 5,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 6,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 7,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 7,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 9,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 10,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 11,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-    {
-      id: 12,
-      name: "Wooden chair",
-      price: 220,
-      details:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-      img: productImg,
-      itsAvailable: true,
-    },
-  ];
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-  return products.map((data) => (
+const ProductsCard = () => {
+  const { data, isLoading } = useGetHomeProductQuery(undefined);
+  const [id, setId] = useState("");
+
+  type TProductData = {
+    _id: string;
+    category: string;
+    name: string;
+    productImg?: string;
+    price: string;
+    description: string;
+    isAvailable: boolean;
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  return data.data?.result?.map((data: TProductData) => (
     <div
-      key={data.id}
+      key={data._id}
       className="card border-[1px] border-[#ddd] cursor-pointer"
     >
       <div className="image">
-        <img src={data.img} />
+        <img src={data?.productImg} />
       </div>
       <div className="details">
-        <div className="center">
+        <div className="center relative">
           <h1>
             {data.name}
             <br />
-            <span>
-              {data?.itsAvailable ? (
-                <span className="available font-semibold">Available</span>
-              ) : (
-                <span className="unavailable font-semibold">Unavailable</span>
-              )}
-            </span>
+            <span className="text-xs available">{data.category?.name}</span>
           </h1>
           <p>
-            {data.details.length > 40
-              ? data.details.slice(0, 100) + "..."
-              : data.details}
+            {data.description.length > 40
+              ? data.description.slice(0, 100) + "..."
+              : data.description}
           </p>
           <ul>
             <li>
@@ -148,11 +55,23 @@ const ProductsCard = () => {
               </Button>
             </li>
             <li>
-              <Button className="capitalize bg-[#2D3A4B] rounded-none">
-                Details
-              </Button>
+              <Link
+                to={`/product-details/${data._id}`}
+                onClick={() => setId(data._id)}
+              >
+                <Button className="capitalize bg-[#2D3A4B] rounded-none">
+                  Details
+                </Button>
+              </Link>
             </li>
           </ul>
+          <p className="absolute top-0 left-1 text-xs">
+            {data?.isAvailable ? (
+              <span className="available font-semibold">Available</span>
+            ) : (
+              <span className="unavailable font-semibold">Unavailable</span>
+            )}
+          </p>
         </div>
       </div>
     </div>

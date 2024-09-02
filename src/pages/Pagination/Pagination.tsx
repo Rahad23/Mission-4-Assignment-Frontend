@@ -1,34 +1,37 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Link } from "react-router-dom";
 
-const Pagination_ = () => {
+const Pagination_ = ({ paginationData, setPage }) => {
+  const handlePageChange = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    const newPage = Number(e.currentTarget.innerText);
+    setPage(newPage);
+  };
+
   return (
-    <Pagination>
+    <Pagination className={paginationData > 0 ? " " : "hidden"}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious href="#" />
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#" isActive>
-            2
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
+        {Array.from({ length: paginationData }, (_, i) => (
+          <PaginationItem key={i}>
+            <Link
+              onClick={setPage(handlePageChange)}
+              to="#"
+              className="p-2 bg-[#2D3A4B] text-white"
+            >
+              {i + 1}
+            </Link>
+          </PaginationItem>
+        ))}
         <PaginationItem>
           <PaginationNext href="#" />
         </PaginationItem>

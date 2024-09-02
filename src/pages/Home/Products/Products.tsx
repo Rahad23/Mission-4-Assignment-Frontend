@@ -1,10 +1,22 @@
-import Pagination_ from "@/pages/Pagination/Pagination";
+// import Pagination_ from "@/pages/Pagination/Pagination";
 import ProductsCard from "./ProductsCard";
+// import { useGetProductQuery } from "@/redux/features/products/Products";
+// import { useState } from "react";
 
 const Products = () => {
+  // const [page, setPage] = useState();
+  // console.log(page);
+  // const { data, isLoading } = useGetProductQuery(undefined);
+
+  // if (isLoading) {
+  //   return "";
+  // }
+
+  // const paginationData = data.data.meta.totalPage;
+
   return (
     <div className="mt-12 lg:px-24">
-      <div className="flex justify-center flex-col items-center w-[590px] mx-auto">
+      <div className="flex justify-center flex-col items-center mx-auto">
         <h1 className="uppercase text-xl font-semibold text-[#2D3A4B]">
           NEW ARRIVAL
         </h1>
@@ -16,9 +28,9 @@ const Products = () => {
       <div className="grid lg:grid-cols-3 grid-cols-1 mt-16">
         <ProductsCard />
       </div>
-      <div className="mt-10">
-        <Pagination_ />
-      </div>
+      {/* <div className="mt-10">
+        <Pagination_ paginationData={paginationData} setPage={setPage} />
+      </div> */}
     </div>
   );
 };
