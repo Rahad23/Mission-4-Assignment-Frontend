@@ -31,7 +31,6 @@ import {
   setDescription,
   setName,
   setPrice,
-  setProductImg,
 } from "@/redux/features/products/ProductSlice";
 import { RootState } from "@/redux/store";
 import { useAppSelector } from "@/redux/hook";
@@ -43,31 +42,54 @@ import {
   useUpdateProductMutation,
 } from "@/redux/features/products/Products";
 import { getCurrentFormattedDate } from "../ProductsDetails/TimeFormate";
-import { z } from "zod";
+import { z, ZodIssue } from "zod";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-const ProductEditDialog = ({ id }) => {
+import { Loader2 } from "lucide-react";
+const ProductEditDialog = ({ id }: { id: string }) => {
+  interface SelectMapType {
+    _id: string;
+    name: string;
+    __v: number;
+    stock: number;
+  }
+
+  interface ProductEditResponse {
+    data?: {
+      success: boolean;
+      message: string;
+    };
+    error?: {
+      data: {
+        errorSources: Array<{ message: string }>;
+      };
+    };
+    isLoading: boolean;
+  }
+
   const dispatch = useDispatch();
   const productData = useAppSelector((state: RootState) => state.product);
   const { data, isLoading: categoryLoading } = useGetCategoryQuery(undefined);
-  const [zodError, setZodError] = useState([]);
+  const [adImgFile, setAdImgFile] = useState<File | null>(null);
+  const [zodError, setZodError] = useState<ZodIssue[]>([]);
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     undefined
   );
   const [updateProduct, { isLoading: productUpdateLoading }] =
-    useUpdateProductMutation();
-  const { data: singleProductData, isLoading: getProductLoading } =
-    useGetOneProductQuery(id);
+    useUpdateProductMutation<ProductEditResponse>();
+  const { data: singleProductData } = useGetOneProductQuery(id);
 
   const { toast } = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    dispatch(setProductImg(file));
+    if (file) {
+      setAdImgFile(file);
+    }
   };
 
   const handleChange = (value: string) => {
@@ -89,8 +111,8 @@ const ProductEditDialog = ({ id }) => {
         const formData = new FormData();
 
         // Append file with key "file"
-        if (productData.productImg) {
-          formData.append("file", productData.productImg);
+        if (adImgFile) {
+          formData.append("file", adImgFile);
         }
 
         // Create an object for other data fields
@@ -104,7 +126,12 @@ const ProductEditDialog = ({ id }) => {
         // Append data object as a JSON string with key "data"
         formData.append("data", JSON.stringify(dataFields));
 
-        const result = await updateProduct({ formData, id });
+        const payload = {
+          formData,
+          id,
+        };
+
+        const result = (await updateProduct(payload)) as ProductEditResponse;
 
         if (result?.data?.success) {
           dispatch(resetProductState());
@@ -117,8 +144,6 @@ const ProductEditDialog = ({ id }) => {
             //     <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
             //   ),
           });
-
-          location.reload();
         }
       }
     } catch (e) {
@@ -180,7 +205,7 @@ const ProductEditDialog = ({ id }) => {
                   {categoryLoading ? (
                     <SelectItem value="Loading...">Loading</SelectItem>
                   ) : (
-                    data?.data?.map((data) => (
+                    data?.data?.map((data: SelectMapType) => (
                       <SelectItem
                         key={data?._id}
                         className="capitalize"
@@ -258,7 +283,7 @@ const ProductEditDialog = ({ id }) => {
                 />
               </div>
               <span className="text-red-600 text-sm">
-                {zodError?.find((err) => err.path[0] === "productImg")?.message}
+                {!adImgFile && "Product image is required!"}
               </span>
             </div>
           </div>
@@ -280,7 +305,13 @@ const ProductEditDialog = ({ id }) => {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={submitProduct}>Save changes</Button>
+          {productUpdateLoading ? (
+            <Button className="capitalize bg-[#2D3A4B] rounded-none mt-4 flex gap-x-2 items-center cursor-default">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> wait
+            </Button>
+          ) : (
+            <Button onClick={submitProduct}>Save changes</Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -10,7 +10,14 @@ import { useGetCategoryQuery } from "@/redux/features/category/Category";
 import { Link } from "react-router-dom";
 
 const DropdownCategory = () => {
-  const { data, isLoading } = useGetCategoryQuery(undefined);
+  const { data } = useGetCategoryQuery(undefined);
+
+  interface CategoryNavbar {
+    name: string;
+    stock: number;
+    __v: number;
+    _id: string;
+  }
 
   return (
     <NavigationMenu>
@@ -19,8 +26,8 @@ const DropdownCategory = () => {
           <NavigationMenuTrigger>Products-Category</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-0 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {data?.data?.map((component) => (
-                <Link to={""}>
+              {data?.data?.map((component: CategoryNavbar) => (
+                <Link to={`/category/${component?._id}`}>
                   <Card
                     key={component._id}
                     className="rounded-none bg-[#ecd738] text-[#2D3A4B]"

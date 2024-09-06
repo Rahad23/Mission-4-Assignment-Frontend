@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { z } from "zod";
+import { z, ZodIssue } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetCategoryQuery } from "@/redux/features/category/Category";
@@ -26,7 +26,6 @@ import {
   setDescription,
   setName,
   setPrice,
-  setProductImg,
 } from "@/redux/features/products/ProductSlice";
 import { useAppSelector } from "@/redux/hook";
 import { RootState } from "@/redux/store";
@@ -38,16 +37,37 @@ import { Loader2 } from "lucide-react";
 import { productSchema } from "./ProductDataValidation";
 
 const MakeProduct = () => {
+  interface MakeProductResponse {
+    data?: {
+      success: boolean;
+      message: string;
+    };
+    error?: {
+      data: {
+        errorSources: Array<{ message: string }>;
+      };
+    };
+    isLoading: boolean;
+  }
+
+  interface SelectMapType {
+    _id: string;
+    name: string;
+    __v: number;
+    stock: number;
+  }
+
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     undefined
   );
-  const [zodError, setZodError] = useState([]);
+  const [zodError, setZodError] = useState<ZodIssue[]>([]);
   const dispatch = useDispatch();
   const productData = useAppSelector((state: RootState) => state.product);
   const [makeProduct, { isLoading: makeProductLoading }] =
-    useMakeProductMutation();
+    useMakeProductMutation<MakeProductResponse>();
   const { data, isLoading: categoryLoading } = useGetCategoryQuery(undefined);
   const { toast } = useToast();
+  const [adImgFile, setAdImgFile] = useState<File | null>(null);
   //here dispatch set category _id
   const handleChange = (value: string) => {
     setSelectedValue(value);
@@ -60,7 +80,9 @@ const MakeProduct = () => {
   //here dispatch set file
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    dispatch(setProductImg(file));
+    if (file) {
+      setAdImgFile(file);
+    }
   };
 
   //make product mutation
@@ -73,8 +95,8 @@ const MakeProduct = () => {
         const formData = new FormData();
 
         // Append file with key "file"
-        if (productData.productImg) {
-          formData.append("file", productData.productImg);
+        if (adImgFile) {
+          formData.append("file", adImgFile);
         }
 
         // Create an object for other data fields
@@ -88,7 +110,7 @@ const MakeProduct = () => {
         // Append data object as a JSON string with key "data"
         formData.append("data", JSON.stringify(dataFields));
 
-        const result = await makeProduct(formData);
+        const result = (await makeProduct(formData)) as MakeProductResponse;
 
         if (result?.data?.success) {
           dispatch(resetProductState());
@@ -101,7 +123,6 @@ const MakeProduct = () => {
             //     <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
             //   ),
           });
-          location.reload();
         }
       }
     } catch (e) {
@@ -125,7 +146,7 @@ const MakeProduct = () => {
 
   return (
     <div className="pr-6 w-full">
-      <Card className="h-screen border-t-0 rounded-t-none overflow-y-scroll no-scrollbar">
+      <Card className="h-screen border-t-0 rounded-t-none overflow-hidden lg:overflow-y-scroll no-scrollbar lg:w-full w-[400px]">
         <CardHeader>
           <CardTitle>Create a new product</CardTitle>
         </CardHeader>
@@ -141,7 +162,7 @@ const MakeProduct = () => {
                   {categoryLoading ? (
                     <SelectItem value="Loading...">Loading</SelectItem>
                   ) : (
-                    data?.data?.map((data) => (
+                    data?.data?.map((data: SelectMapType) => (
                       <SelectItem
                         key={data?._id}
                         className="capitalize"
@@ -187,7 +208,7 @@ const MakeProduct = () => {
               <Label htmlFor="picture">Picture</Label>
               <Input onChange={handleFileChange} id="picture" type="file" />
               <span className="text-red-600 text-sm">
-                {zodError?.find((err) => err.path[0] === "productImg")?.message}
+                {!adImgFile && "Product image is required!"}
               </span>
             </div>
           </div>

@@ -17,7 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MdOutlineDelete } from "react-icons/md";
 import { useGetHomeProductQuery } from "@/redux/features/products/Products";
 import { useState } from "react";
 import { TbCurrencyTaka } from "react-icons/tb";
@@ -25,13 +24,32 @@ import ProductEditDialog from "./ProductEditDialog";
 import ProductDelete from "./ProductDelete";
 import { useToast } from "@/components/ui/use-toast";
 import { getCurrentFormattedDate } from "../ProductsDetails/TimeFormate";
+import LoadingSpenar from "../LoadingSpenar/LoadingSpenar";
 
 const ProductTable = () => {
+  interface Category {
+    _id: string;
+    name: string;
+    stock: number;
+  }
+
+  interface Product {
+    _id: string;
+    name: string;
+    price: string;
+    productImg: string;
+    ratings: number;
+    isAvailable: boolean;
+    description: string;
+    category: Category;
+    createdAt: string;
+    updatedAt: string;
+  }
+
   const { toast } = useToast();
-  const [search, setSearch] = useState("");
   const [tostDeleteProduct, setToastDeleteProduct] = useState(false);
 
-  const { data, isLoading } = useGetHomeProductQuery("");
+  const { data, isLoading } = useGetHomeProductQuery(undefined);
 
   if (tostDeleteProduct) {
     toast({
@@ -45,8 +63,12 @@ const ProductTable = () => {
     setToastDeleteProduct(false);
   }
 
-  return (
-    <div className="w-full px-7 max-h-[80vh] overflow-y-auto no-scrollbar">
+  return isLoading ? (
+    <div className="mx-auto">
+      <LoadingSpenar />
+    </div>
+  ) : (
+    <div className="w-full px-7 max-h-[80vh] overflow-y-auto no-scrollbar lg:mt-0 mt-5">
       <Table>
         <TableHeader>
           <TableRow>
@@ -59,7 +81,7 @@ const ProductTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.data?.result?.map((invoice) => (
+          {data?.data?.result?.map((invoice: Product) => (
             <TableRow key={invoice._id}>
               <TableCell className="font-medium">
                 <img className="w-16" src={invoice?.productImg} />

@@ -18,10 +18,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import CartCheckOutModal from "./CartCheckOutModal/CartCheckOutModal";
 
 // import { ToastAction } from "@/components/ui/toast";
 const CartItems = () => {
-  const { data, isLoading } = useGetAddToCartProductQuery(undefined);
+  const { data } = useGetAddToCartProductQuery(undefined);
 
   const [productId_, setProductId_] = useState("");
   const [updateProductQuantity, { isLoading: updateQuantityLoading }] =
@@ -32,7 +33,29 @@ const CartItems = () => {
     quantity: number;
   };
 
-  const subtotal = data?.data.reduce((total, item) => {
+  interface Category_ {
+    name: string;
+    stock: number;
+    _id: string;
+  }
+
+  interface Product_ {
+    name: string;
+    price: string;
+    productImg: string;
+    _id: string;
+  }
+
+  interface CartProduct {
+    category: Category_;
+    productId: Product_;
+    price: string;
+    quantity: number;
+    __v: number;
+    _id: string;
+  }
+
+  const subtotal = data?.data.reduce((total: number, item: CartProduct) => {
     return total + (Number(item?.price) || 0);
   }, 0);
 
@@ -47,13 +70,12 @@ const CartItems = () => {
   };
 
   const outOfStockProduct =
-    data?.data.find((data) => data?.category?.stock === 0)?.category?.stock ===
-      0 && true;
-
+    data?.data.find((data: CartProduct) => data?.category?.stock === 0)
+      ?.category?.stock === 0 && true;
   return (
     <Card className="border-[1px] border-[#fffffff1]">
       <div className="flex flex-col gap-y-1">
-        {data?.data.map((data) => (
+        {data?.data.map((data: CartProduct) => (
           <CardHeader
             key={data?._id}
             className={` border-[1px] border-gray-300 px-1 py-1 ${
@@ -67,13 +89,15 @@ const CartItems = () => {
                 </Avatar>
               </Link>
               <div className="flex flex-col gap-y-1 py-2">
-                <h1 className="uppercase font-semibold text-[#3A3A3A]">
-                  {data?.productId?.name}
-                </h1>
-                <p className="uppercase font-semibold flex items-center">
-                  <TbCurrencyTaka className="text-xl" />
-                  {data?.price}
-                </p>
+                <Link to={`/product-details/${data?.productId?._id}`}>
+                  <h1 className="uppercase font-semibold text-[#3A3A3A]">
+                    {data?.productId?.name}
+                  </h1>
+                  <p className="uppercase font-semibold flex items-center">
+                    <TbCurrencyTaka className="text-xl" />
+                    {data?.price}
+                  </p>
+                </Link>
 
                 <div className="flex items-center gap-x-3 mt-1">
                   {data?.quantity === 1 ? (
@@ -159,12 +183,13 @@ const CartItems = () => {
             </Tooltip>
           </TooltipProvider>
         ) : (
-          <Button
-            className="bg-[#2D3A4B] text-white text-lg hover:bg-[##2D3A4B] hover:text-white uppercase rounded-md"
-            variant={"outline"}
-          >
-            Check Out
-          </Button>
+          <CartCheckOutModal cartProduct={data?.data} />
+          // <Button
+          //   className="bg-[#2D3A4B] text-white text-lg hover:bg-[##2D3A4B] hover:text-white uppercase rounded-md"
+          //   variant={"outline"}
+          // >
+          //   Check Out
+          // </Button>
         )}
       </div>
     </Card>

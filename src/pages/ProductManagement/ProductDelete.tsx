@@ -14,9 +14,16 @@ import { DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
 import { useDeleteProductMutation } from "@/redux/features/products/Products";
 import { MdOutlineDelete } from "react-icons/md";
 
-const ProductDelete = ({ id, isDelete }) => {
-  const [deleteProduct, { isLoading: deleteLoading }] =
-    useDeleteProductMutation(id);
+interface ProductDeleteCategoryProps {
+  isDelete: React.Dispatch<React.SetStateAction<boolean>>; // Type for setSearch function
+  id: string; // Type for searchText
+}
+
+const ProductDelete: React.FC<ProductDeleteCategoryProps> = ({
+  id,
+  isDelete,
+}) => {
+  const [deleteProduct] = useDeleteProductMutation();
 
   const deleteProductInServer = async () => {
     const result = await deleteProduct(id);

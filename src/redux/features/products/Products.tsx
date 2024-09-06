@@ -11,7 +11,12 @@ const productData = baseApi.injectEndpoints({
       }),
       getHomeProduct: builder.query({
         query: (data) => {
-          return { url: `/products/home-product`, method: "GET" };
+          return {
+            url: `/products/home-product?searchTerm=${
+              data?.search ? data?.search : ""
+            }`,
+            method: "GET",
+          };
         },
         providesTags: ["product"],
       }),
@@ -39,17 +44,19 @@ const productData = baseApi.injectEndpoints({
         },
         invalidatesTags: ["product"],
       }),
-      updateProduct: builder.mutation<void, FormData>({
-        query: ({ formData, id }) => {
-          return {
-            url: `/products/${id}`,
-            method: "PATCH",
-            body: formData,
-            // headers: { "Content-Type": "multipart/form-data" },
-          };
-        },
-        invalidatesTags: ["product"],
-      }),
+      updateProduct: builder.mutation<void, { formData: FormData; id: string }>(
+        {
+          query: ({ formData, id }) => {
+            return {
+              url: `/products/${id}`,
+              method: "PATCH",
+              body: formData,
+              // headers: { "Content-Type": "multipart/form-data" },
+            };
+          },
+          invalidatesTags: ["product"],
+        }
+      ),
       deleteProduct: builder.mutation({
         query: (id) => {
           return {

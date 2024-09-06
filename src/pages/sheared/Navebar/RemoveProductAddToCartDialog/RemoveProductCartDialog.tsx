@@ -14,11 +14,17 @@ import { Button } from "@/components/ui/button";
 import { useUndoProductMutation } from "@/redux/features/addToCart/AddToCart";
 import { RxCross2 } from "react-icons/rx";
 
-const RemoveProductCartDialog = ({ id }) => {
-  const [undoProduct, { isLoading: undoLoading }] = useUndoProductMutation();
+interface RemoveProductCartDialogProps {
+  id: string;
+}
+
+const RemoveProductCartDialog: React.FC<RemoveProductCartDialogProps> = ({
+  id,
+}) => {
+  const [undoProduct] = useUndoProductMutation();
 
   const undoAddToCart = async (id: string) => {
-    const result = await undoProduct(id);
+    await undoProduct(id);
   };
 
   return (

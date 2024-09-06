@@ -2,6 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "./api/baseApi";
 import orderReducer from "./features/orders/OrdersSlice";
 import productReducer from "./features/products/ProductSlice";
+import cartOrderReducer from "./features/addToCart/AddToCartSlice";
+import advertisementReducer from "./features/advertisement/advertisementSlice";
 
 // ...
 
@@ -10,6 +12,8 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     order: orderReducer,
     product: productReducer,
+    cartOrder: cartOrderReducer,
+    advertisement: advertisementReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseApi.middleware),

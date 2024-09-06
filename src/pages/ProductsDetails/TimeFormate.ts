@@ -1,7 +1,7 @@
 export const getCurrentFormattedDate = () => {
   const now = new Date();
 
-  const options = {
+  const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     year: "numeric",
     month: "long",

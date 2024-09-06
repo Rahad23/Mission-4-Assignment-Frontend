@@ -5,7 +5,6 @@ export type TProduct = {
   price: string;
   category: string;
   description: string;
-  productImg?: File;
 };
 
 const initialState: TProduct = {
@@ -13,7 +12,6 @@ const initialState: TProduct = {
   price: "",
   category: "",
   description: "",
-  productImg: undefined,
 };
 
 const productSlice = createSlice({
@@ -32,10 +30,7 @@ const productSlice = createSlice({
     setDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;
     },
-    setProductImg: (state, action: PayloadAction<File | undefined>) => {
-      state.productImg = action.payload;
-    },
-    resetProductState(state) {
+    resetProductState() {
       return initialState; // Resets state to initial values
     },
   },
@@ -45,7 +40,6 @@ export const {
   setName,
   setPrice,
   setDescription,
-  setProductImg,
   setCategoryId,
   resetProductState,
 } = productSlice.actions;

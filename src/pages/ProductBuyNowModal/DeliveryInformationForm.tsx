@@ -8,8 +8,14 @@ import {
   setEmail,
   setPhoneNumber,
 } from "../../redux/features/orders/OrdersSlice";
+import { ZodIssue } from "zod";
+interface DeliveryInformationFormProps {
+  zodErrorData?: ZodIssue[]; // Optional, since you may not always have errors
+}
 
-const DeliveryInformationForm = ({ zodError }) => {
+const DeliveryInformationForm: React.FC<DeliveryInformationFormProps> = ({
+  zodErrorData,
+}) => {
   const dispatch = useAppDispatch();
 
   return (
@@ -29,7 +35,7 @@ const DeliveryInformationForm = ({ zodError }) => {
           onChange={(e) => dispatch(setName(e.target.value))}
         />
         <span className="text-red-600">
-          {zodError?.find((err) => err.path[0] === "name")?.message}
+          {zodErrorData?.find((err) => err.path[0] === "name")?.message}
         </span>
       </div>
       <div className="flex flex-col">
@@ -41,7 +47,7 @@ const DeliveryInformationForm = ({ zodError }) => {
           onChange={(e) => dispatch(setPhoneNumber(e.target.value))}
         />
         <span className="text-red-600">
-          {zodError?.find((err) => err.path[0] === "phoneNumber")?.message}
+          {zodErrorData?.find((err) => err.path[0] === "phoneNumber")?.message}
         </span>
       </div>
       <div className="flex flex-col">
@@ -52,7 +58,7 @@ const DeliveryInformationForm = ({ zodError }) => {
           onChange={(e) => dispatch(setEmail(e.target.value))}
         />
         <span className="text-red-600">
-          {zodError?.find((err) => err.path[0] === "email")?.message}
+          {zodErrorData?.find((err) => err.path[0] === "email")?.message}
         </span>
       </div>
       <div className="flex flex-col">
@@ -63,7 +69,10 @@ const DeliveryInformationForm = ({ zodError }) => {
           onChange={(e) => dispatch(setDeliveryAddress(e.target.value))}
         />
         <span className="text-red-600">
-          {zodError?.find((err) => err.path[0] === "deliveryAddress")?.message}
+          {
+            zodErrorData?.find((err) => err.path[0] === "deliveryAddress")
+              ?.message
+          }
         </span>
       </div>
     </div>

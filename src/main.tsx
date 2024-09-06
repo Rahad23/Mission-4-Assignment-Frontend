@@ -6,11 +6,13 @@ import { store } from "./redux/store.ts";
 import { RouterProvider } from "react-router-dom";
 import router from "./router/router.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
+import PageRefreshWarning from "./PageRefreshWorning/PageRefreshWarning.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Toaster />
     <Provider store={store}>
+      <PageRefreshWarning />
       <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>

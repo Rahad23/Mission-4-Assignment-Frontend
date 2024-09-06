@@ -1,7 +1,13 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-const SortingPriceLowToHigh = ({ setPriceSorting }) => {
+interface SortingProductCategoryProps {
+  setPriceSorting: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SortingPriceLowToHigh: React.FC<SortingProductCategoryProps> = ({
+  setPriceSorting,
+}) => {
   return (
     <div className="flex items-center space-x-2">
       <RadioGroup

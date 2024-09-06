@@ -47,9 +47,28 @@ const ProductCard = () => {
   }
   const products = data.data?.result;
 
+  interface Category {
+    name: string;
+    _id: string;
+  }
+
+  interface ProductsC {
+    createdAt: string;
+    category: Category;
+    description: string;
+    isAvailable: boolean;
+    name: string;
+    price: string;
+    productImg: string;
+    ratings: number;
+    updatedAt: string;
+    __v: number;
+    _id: string;
+  }
+
   return (
     <div className="mt-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between lg:flex-row flex-col items-center">
         <div className="flex items-center">
           <div className="relative w-80">
             <Input
@@ -68,7 +87,7 @@ const ProductCard = () => {
           )}
         </div>
 
-        <div>
+        <div className="lg:mt-0 mt-7">
           <div className="flex items-center">
             <SortingSelectior setCategory={setCategory} />
 
@@ -91,10 +110,10 @@ const ProductCard = () => {
         <h1 className="uppercase text-center text-xl font-semibold text-[#2D3A4B]">
           All Products
         </h1>
-        <div className="lg:px-24 mt-10 grid grid-cols-4 gap-4">
+        <div className="lg:px-24 mt-10 grid lg:grid-cols-4 grid-cols-1 gap-4">
           {(categoryData?.data?.result?.length === 0 && search === "") ||
           search !== ""
-            ? products?.map((data) => (
+            ? products?.map((data: ProductsC) => (
                 <Card key={data._id} data-aos="fade-in">
                   <img
                     src={data.productImg}
@@ -123,7 +142,7 @@ const ProductCard = () => {
                   </CardContent>
                 </Card>
               ))
-            : categoryData?.data?.result?.map((data) => (
+            : categoryData?.data?.result?.map((data: ProductsC) => (
                 <Card key={data._id} data-aos="fade-in">
                   <img
                     src={data.productImg}

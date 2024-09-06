@@ -1,83 +1,11 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import productImg from "../../../assets/cartImg/item-img-1-1.jpg";
 import { Button } from "@/components/ui/button";
 // import Pagination_ from "@/pages/Pagination/Pagination";
 import AOS from "aos";
 import "aos/dist/aos.css";
-const products = [
-  {
-    id: 1,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-  {
-    id: 2,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-  {
-    id: 3,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-  {
-    id: 4,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-  {
-    id: 5,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-  {
-    id: 6,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-  {
-    id: 7,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-  {
-    id: 7,
-    name: "Wooden chair",
-    price: 220,
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, veritatis aliquam. Excepturi magni vel blanditiis odit id, corrupti veritatis quas corporis repudiandae modi inventore quae labore similique dicta nisi? Vero?",
-    img: productImg,
-    itsAvailable: true,
-  },
-];
+import { useGetHomeProductQuery } from "@/redux/features/products/Products";
+import { TbCurrencyTaka } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 //Aos animation customization
 AOS.init({
@@ -102,21 +30,64 @@ AOS.init({
 });
 
 const FeaturedProduct = () => {
+  const { data } = useGetHomeProductQuery(undefined);
+
+  interface Category {
+    name: string;
+    stock: number;
+    _id: string;
+  }
+
+  interface Products {
+    category: Category;
+    createdAt: string;
+    description: string;
+    isAvailable: boolean;
+    name: string;
+    price: string;
+    productImg: string;
+    ratings: number;
+    updatedAt: string;
+    _id: string;
+  }
+
   return (
     <div className="mt-28">
       <h1 className="uppercase text-center text-xl font-semibold text-[#2D3A4B]">
         Featured Products
       </h1>
-      <div className="lg:px-24 mt-10 grid grid-cols-4 gap-4">
-        {products.map((data) => (
-          <Card key={data.id} data-aos="fade-in">
-            <CardHeader>
-              <img src={data.img} className="w-[200px] mx-auto" alt="" />
+      <div className="lg:px-24 px-7 mt-10 grid lg:grid-cols-4 grid-cols-2 gap-4">
+        {data?.data?.result.map((data: Products) => (
+          <Card key={data._id} data-aos="fade-in">
+            <CardHeader className="px-7">
+              <img
+                src={data?.productImg}
+                className="w-[200px] mx-auto"
+                alt=""
+              />
+              <div className="mt-2 gap-y-0 flex flex-col">
+                <span className="text-base font-semibold">
+                  <span className="text-base text-gray-700">Category:</span>{" "}
+                  {data?.category?.name}
+                </span>
+                <span className="text-base font-semibold">
+                  <span className="text-base text-gray-700">Name:</span>{" "}
+                  {data?.name}
+                </span>
+                <span className="flex items-center text-base font-semibold">
+                  <span className="text-base text-gray-700">Price:</span>{" "}
+                  <TbCurrencyTaka className="text-2xl" />
+                  {data?.price}
+                </span>
+              </div>
             </CardHeader>
             <CardContent className="justify-center flex items-center">
-              <Button className="text-base py-1 px-3 text-[#2D3A4B] rounded-lg bg-[#FDE428] hover:bg-[#FDE428]">
-                View Product
-              </Button>
+              <Link to={`/product-details/${data?._id}`}>
+                {" "}
+                <Button className="text-base py-1 px-3 text-[#2D3A4B] rounded-lg bg-[#FDE428] hover:bg-[#FDE428]">
+                  View Product
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         ))}

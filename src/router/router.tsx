@@ -7,6 +7,11 @@ import { createBrowserRouter } from "react-router-dom";
 import ProductManagement from "../pages/ProductManagement/ProductManagement";
 import ProductTable from "@/pages/ProductManagement/ProductTable";
 import MakeProduct from "@/pages/ProductManagement/MakeProduct";
+import CategoryBaseProduct from "@/pages/CategoryBaseProduct/CategoryBaseProduct";
+import AboutUS from "@/pages/AboutUS/AboutUS";
+import MakeCategory from "@/pages/CategoryManagement/MakeCategory";
+import AllCategory from "@/pages/CategoryManagement/AllCategory";
+import BenarAdManagement from "@/pages/BanarAdManagement/BannerAdManagement";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/products",
         element: <AllProducts />,
+      },
+      {
+        path: "/category/:id",
+        element: <CategoryBaseProduct />,
       },
       {
         path: "/product-details/:id",
@@ -41,7 +50,23 @@ const router = createBrowserRouter([
             path: "all-product",
             element: <ProductTable />,
           },
+          {
+            path: "category",
+            element: <MakeCategory />,
+          },
+          {
+            path: "all-category",
+            element: <AllCategory />,
+          },
+          {
+            path: "ad-management",
+            element: <BenarAdManagement />,
+          },
         ],
+      },
+      {
+        path: "/about-us",
+        element: <AboutUS />,
       },
     ],
   },

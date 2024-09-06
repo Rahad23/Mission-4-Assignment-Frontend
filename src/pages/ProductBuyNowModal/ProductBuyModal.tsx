@@ -24,13 +24,40 @@ import {
 } from "../../redux/features/orders/OrdersSlice";
 import { orderSchema } from "./OrderDataValidation";
 import { RootState } from "../../redux/store";
-import { z } from "zod";
+import { z, ZodIssue } from "zod";
 import { useState } from "react";
 import { useMakeOrderMutation } from "../../redux/features/orders/Oders";
 import { Loader2 } from "lucide-react";
 
-const ProductBuyModal = ({ data }) => {
-  const [zodError, setZodError] = useState([]);
+interface Category {
+  category: string;
+  name: string;
+  stock: number;
+  _id: string;
+}
+
+interface Product {
+  description: string;
+  isAvailable: boolean;
+  name: string;
+  category: Category;
+  price: string;
+  productImg: string;
+  ratings: number;
+  __v: number;
+  _id: string;
+}
+
+interface ByProductData {
+  data: Product;
+  message: string;
+  success: boolean;
+}
+interface ProductProps {
+  data: ByProductData;
+}
+const ProductBuyModal: React.FC<ProductProps> = ({ data }) => {
+  const [zodError, setZodError] = useState<ZodIssue[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(
     data?.data?.category?.stock === 0 ? false : true
   );
@@ -84,7 +111,7 @@ const ProductBuyModal = ({ data }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>
             <span className="text-lg font-semibold text-red-600">
-              Only Home Delivery Available.
+              Only Cash on Delivery Available.
             </span>
           </AlertDialogTitle>
           <AlertDialogDescription>
@@ -115,7 +142,7 @@ const ProductBuyModal = ({ data }) => {
               </div>
             </div>
             <div>
-              <DeliveryInformationForm zodError={zodError} />{" "}
+              <DeliveryInformationForm zodErrorData={zodError} />{" "}
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>

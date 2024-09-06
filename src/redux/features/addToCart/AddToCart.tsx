@@ -27,6 +27,12 @@ const addToCart = baseApi.injectEndpoints({
       },
       invalidatesTags: ["addToCart"],
     }),
+    cartOrderPost: builder.mutation({
+      query: (data) => {
+        return { url: "/orders-cart", method: "POST", body: data };
+      },
+      invalidatesTags: ["addToCart"],
+    }),
   }),
 });
 
@@ -35,4 +41,5 @@ export const {
   useUndoProductMutation,
   useGetAddToCartProductQuery,
   useUpdateProductQuantityMutation,
+  useCartOrderPostMutation
 } = addToCart;

@@ -14,6 +14,7 @@ import { Loader2 } from "lucide-react";
 import ProductBuyModal from "../ProductBuyNowModal/ProductBuyModal";
 import { TbCurrencyTaka } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
+import ImageMagniFire from "@/components/ImageMagniFire/ImageMagniFire";
 type cartData = {
   productId: string;
   category: string;
@@ -29,7 +30,7 @@ const ProductsDetails = () => {
   const [makeAddToCart, { isLoading: addToCartLoading }] =
     useMakeAddToCartMutation();
   // undo product mutation
-  const [undoProduct, { isLoading: undoLoading }] = useUndoProductMutation();
+  const [undoProduct] = useUndoProductMutation();
   const { toast } = useToast();
 
   const handleAddToCart = async (productName: string) => {
@@ -56,9 +57,7 @@ const ProductsDetails = () => {
         });
       } else {
         toast({
-          title: (
-            <div className="text-white font-medium">{result.data.message}</div>
-          ),
+          title: `<div className="text-white font-medium">${result.data.message}</div>`,
           description: "",
           action: (
             <ToastAction
@@ -120,26 +119,29 @@ const ProductsDetails = () => {
                 )}
               </span>{" "}
             </h1>
-            <img src={data?.data.productImg} alt="" />
+
+            <ImageMagniFire productImg={data?.data?.productImg} />
+
+            {/* <img src={data?.data.productImg} alt="" /> */}
           </CardHeader>
           <CardDescription className="px-5 mt-3">
             <div className="flex flex-col gap-y-1">
               <h1 className="text-md font-semibold text-[#101316]">
                 Product Name:{" "}
                 <span className="text-[#2D3A4B] font-bold">
-                  {data.data.name}
+                  {data?.data?.name}
                 </span>
               </h1>
               <h1 className="capitalize text-md font-semibold text-[#101316]">
                 Category:{" "}
                 <span className="text-[#2D3A4B] font-bold">
-                  {data.data.category.name}
+                  {data?.data.category?.name}
                 </span>
               </h1>
               <h1 className="text-md font-semibold text-[#101316] flex items-center">
                 Price:{" "}
                 <span className="text-[#2D3A4B] font-bold flex items-center">
-                  <TbCurrencyTaka className="text-lg" /> {data.data.price}
+                  <TbCurrencyTaka className="text-lg" /> {data?.data?.price}
                 </span>
               </h1>
               <div className="flex items-center text-yellow-500">
@@ -148,7 +150,7 @@ const ProductsDetails = () => {
             </div>
             <div className="mt-3">
               <p className="text-gray-950 font-bold">
-                Product Details: {data.data.description}
+                Product Details: {data?.data?.description}
               </p>
             </div>
             <div className="mt-3 flex items-center gap-x-5">

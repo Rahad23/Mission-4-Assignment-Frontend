@@ -1,21 +1,29 @@
 // import { Card } from "@/components/ui/card";
-import {
-  useGetHomeProductQuery,
-  useGetProductQuery,
-} from "@/redux/features/products/Products";
-import "./ProductsCardStyle/ProductsCard.css";
+import { useGetHomeProductQuery } from "@/redux/features/products/Products";
 // import productImg from "../../../assets/cartImg/item-img-1-1.jpg";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+
 import { Link } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const ProductsCard = () => {
-  const { data, isLoading } = useGetHomeProductQuery(undefined);
-  const [id, setId] = useState("");
+  const { data } = useGetHomeProductQuery(undefined);
+
+  interface Category {
+    name: string;
+    stock: number;
+    _id: string;
+  }
 
   type TProductData = {
     _id: string;
-    category: string;
+    category: Category;
     name: string;
     productImg?: string;
     price: string;
@@ -23,61 +31,44 @@ const ProductsCard = () => {
     isAvailable: boolean;
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  return data.data?.result?.map((data: TProductData) => (
-    <div
-      key={data._id}
-      className="card border-[1px] border-[#ddd] cursor-pointer"
-    >
-      <div className="image">
-        <img src={data?.productImg} />
-      </div>
-      <div className="details">
-        <div className="center relative">
-          <h1>
-            {data.name}
-            <br />
-            <span className="text-xs available">{data.category?.name}</span>
-          </h1>
-          <p>
-            {data.description.length > 40
-              ? data.description.slice(0, 100) + "..."
-              : data.description}
-          </p>
-          <ul>
-            <li>
-              {" "}
-              <Button className="capitalize bg-[#2D3A4B] rounded-none">
-                Buy Now
-              </Button>
-            </li>
-            <li>
-              <Link
-                to={`/product-details/${data._id}`}
-                onClick={() => setId(data._id)}
-              >
-                <Button className="capitalize bg-[#2D3A4B] rounded-none">
-                  Details
-                </Button>
-              </Link>
-            </li>
-          </ul>
-          <p className="absolute top-0 left-1 text-xs">
-            {data?.isAvailable ? (
-              <span className="available font-semibold">Available</span>
-            ) : (
-              <span className="unavailable font-semibold">Unavailable</span>
-            )}
-          </p>
+  return data?.data?.result?.map((data: TProductData) => (
+    <Card key={data?._id} className="lg:w-[350px]  w-[320px] mx-auto">
+      <CardHeader className="p-0">
+        <img src={data?.productImg} alt="" />
+      </CardHeader>
+      <CardContent className="px-1 mt-1">
+        <div>
+          {data?.category?.stock === 0 ? (
+            <h1 className="text-red-600">Out Of Stock</h1>
+          ) : (
+            <h1 className="text-green-600">Available</h1>
+          )}
+          <div className="mt-2 gap-y-0">
+            <h1 className="text-lg font-semibold">
+              <span className="text-base text-gray-700">Category:</span>{" "}
+              {data?.category?.name}
+            </h1>
+            <h1 className="text-lg font-semibold">
+              <span className="text-base text-gray-700">Name:</span>{" "}
+              {data?.name}
+            </h1>
+            <h1 className="flex items-center text-lg font-semibold">
+              <span className="text-base text-gray-700">Price:</span>{" "}
+              <TbCurrencyTaka className="text-2xl" />
+              {data?.price}
+            </h1>
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="w-full">
+        <Link className="w-full" to={`/product-details/${data?._id}`}>
+          <Button className="w-full hover:bg-[#FDE428] bg-[#FDE428] text-black text-lg font-semibold">
+            View
+          </Button>
+        </Link>
+      </CardFooter>
+    </Card>
   ));
 };
-// <Card key={data.id} className="rounded-none">
-//   <img src={data.img} alt="" />
-// </Card>
+
 export default ProductsCard;

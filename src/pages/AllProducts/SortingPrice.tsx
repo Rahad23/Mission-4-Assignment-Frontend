@@ -8,7 +8,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const SortingPrice = ({ setPriceRange }) => {
+interface SortingProductCategoryProps {
+  setPriceRange: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SortingPrice: React.FC<SortingProductCategoryProps> = ({
+  setPriceRange,
+}) => {
   const priceRange = [
     {
       id: 1,

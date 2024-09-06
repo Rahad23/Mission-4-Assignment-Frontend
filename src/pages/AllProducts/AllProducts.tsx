@@ -2,7 +2,7 @@ import ProductCard from "./ProductCard";
 
 const AllProducts = () => {
   return (
-    <div className="px-28 mt-20">
+    <div className="lg:px-28 px-7 mt-20">
       <ProductCard />
     </div>
   );

@@ -1,4 +1,4 @@
-export function MenuIcon(props) {
+export function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -19,7 +19,7 @@ export function MenuIcon(props) {
   );
 }
 
-export function MountainIcon(props) {
+export function MountainIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
