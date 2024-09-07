@@ -92,7 +92,11 @@ const ProductTable = () => {
                 <TbCurrencyTaka className="text-lg" />
                 {invoice?.price}
               </TableCell>
-              <TableCell className="w-[30%]">{invoice.description}</TableCell>
+              <TableCell className="w-[30%]">
+                {invoice.description?.length > 100
+                  ? invoice.description.slice(0, 100) + "..."
+                  : invoice.description}
+              </TableCell>
 
               <TableCell>
                 <DropdownMenu>
