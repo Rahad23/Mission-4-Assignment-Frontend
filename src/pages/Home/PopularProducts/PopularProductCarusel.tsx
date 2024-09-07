@@ -12,6 +12,7 @@ import "./EmblaCarouselStyle/embla.css";
 import "./EmblaCarouselStyle/sandbox.css";
 import { Link } from "react-router-dom";
 import { useGetHomeProductQuery } from "@/redux/features/products/Products";
+import LoadingSpenar from "@/pages/LoadingSpenar/LoadingSpenar";
 
 const EmblaCarousel = () => {
   interface Category {
@@ -63,7 +64,7 @@ const EmblaCarousel = () => {
   );
   const { data, isLoading } = useGetHomeProductQuery(undefined);
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingSpenar />;
   }
   const products = data?.data?.result;
 

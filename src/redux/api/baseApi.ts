@@ -9,9 +9,9 @@ export const baseApi = createApi({
     "category",
     "advertisement",
   ],
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://campers-shop-backend-nine.vercel.app/api/v2",
-  }),
+  //Live link
+  //https://campers-shop-backend-nine.vercel.app/api/v2
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api/v2" }),
   //   endpoints: (builder) => ({
   //     getAllProduct: builder.query({
   //         query: () => ({ url: "/products", method: "GET" }),

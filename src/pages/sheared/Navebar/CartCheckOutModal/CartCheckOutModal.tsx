@@ -43,7 +43,7 @@ interface CartCheckOutProps {
 }
 
 const CartCheckOutModal: React.FC<CartCheckOutProps> = ({ cartProduct }) => {
-  const subtotal = cartProduct.reduce((total, item) => {
+  const subtotal = cartProduct?.reduce((total, item) => {
     return total + (Number(item?.price) || 0);
   }, 0);
 

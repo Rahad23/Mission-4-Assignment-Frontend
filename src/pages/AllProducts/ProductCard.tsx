@@ -12,6 +12,7 @@ import SortingPrice from "./SortingPrice";
 import { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import SortingPriceLowToHigh from "./SortingPriceLowToHigh";
+import LoadingSpenar from "../LoadingSpenar/LoadingSpenar";
 
 const ProductCard = () => {
   const [search, setSearch] = useState("");
@@ -43,7 +44,7 @@ const ProductCard = () => {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingSpenar />;
   }
   const products = data.data?.result;
 
